@@ -1,0 +1,101 @@
+# GitHub Action for packaging and releasing the EthioRiskSurv-Toolbox QGIS plugin.
+#
+# This workflow is triggered when a new tag is pushed to the repository.
+# It builds the plugin, creates a zip archive, and drafts a new release
+# on GitHub with the zip file attached.
+#
+# To trigger this workflow:
+# 1. git tag v0.1.0
+# 2. git push origin v0.1.0
+
+name: Deploy Plugin
+
+on:
+  push:
+    tags:
+      - "v*" # Trigger on tags starting with 'v', e.g., v0.1.0, v1.0.0
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Check out the repository code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Set up Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      # 3. Install development dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyqt5-dev-tools
+
+      # 4. Get plugin package name and version from metadata.txt
+      # This makes the script dynamic and reusable.
+      - name: Get package name and version
+        id: package_info
+        run: |
+          PACKAGE_NAME=$(basename -s .git `git config --get remote.origin.url` | sed 's/EthioRiskSurv-Toolbox/ethiorisksurv_toolbox/')
+          VERSION=${{ github.ref_name }}
+          echo "PACKAGE_NAME=${PACKAGE_NAME}" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "Package name is: ${PACKAGE_NAME}"
+          echo "Version from tag is: ${VERSION}"
+
+      # 5. Compile UI and Resource files
+      # This ensures the distributed plugin has the latest compiled Python files.
+      - name: Compile UI and Resources
+        run: |
+          make compile
+        # If you don't use a Makefile, use the direct commands:
+        # pyuic5 -x ${{ env.PACKAGE_NAME }}/ui/main_dialog.ui -o ${{ env.PACKAGE_NAME }}/ui/main_dialog_ui.py
+        # pyrcc5 ${{ env.PACKAGE_NAME }}/resources.qrc -o ${{ env.PACKAGE_NAME }}/resources.py
+
+      # 6. Create the plugin ZIP archive
+      # The structure inside the zip must be a single folder with the package name.
+      - name: Create ZIP archive
+        run: |
+          # Create a temporary directory to stage the files
+          mkdir -p staging/${{ env.PACKAGE_NAME }}
+          # Copy the plugin source code into the staging directory
+          rsync -av --progress ${{ env.PACKAGE_NAME }}/ staging/${{ env.PACKAGE_NAME }}/ --exclude 'tests/' --exclude '*.pyc' --exclude '__pycache__'
+          # Create the zip file from the staging directory
+          cd staging
+          zip -r ../${{ env.PACKAGE_NAME }}.zip ${{ env.PACKAGE_NAME }}
+          cd ..
+
+      # 7. Create a new GitHub Release and upload the artifact
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref_name }}
+          body: |
+            New release for EthioSurv-RiskToolbox version ${{ github.ref_name }}.
+
+            **Changes in this version:**
+            - (Add release notes here)
+
+            **Installation:**
+            Download the attached `${{ env.PACKAGE_NAME }}.zip` file and install it through the QGIS Plugin Manager.
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./${{ env.PACKAGE_NAME }}.zip
+          asset_name: ${{ env.PACKAGE_NAME }}.zip
+          asset_content_type: application/zip

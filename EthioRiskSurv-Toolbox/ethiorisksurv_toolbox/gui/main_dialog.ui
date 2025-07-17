@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>EthioSurvRiskToolboxDialogBase</class>
+ <widget class="QDialog" name="EthioSurvRiskToolboxDialogBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>550</width>
+    <height>650</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>EthioSurv-RiskToolbox</string>
+  </property>
+  <layout class="QVBoxLayout" name="main_layout">
+   <item>
+    <widget class="QTabWidget" name="tab_widget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <!-- =================================================================== -->
+     <!-- TAB 1: RISK ANALYSIS                                                -->
+     <!-- =================================================================== -->
+     <widget class="QWidget" name="tab_risk_analysis">
+      <attribute name="title">
+       <string>1. Risk Analysis</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_1" rowstretch="0,0,0,0,0,0,0,0,0,1,0">
+       <item row="0" column="0" colspan="2"><widget class="QLabel" name="label_project_def"><property name="text"><string><b>1. Project Definition</b></string></property></widget></item>
+       <item row="1" column="0"><widget class="QLabel" name="label_project_name"><property name="text"><string>Project Name:</string></property></widget></item>
+       <item row="1" column="1"><widget class="QLineEdit" name="le_project_name"/></item>
+       <item row="2" column="0"><widget class="QLabel" name="label_objective"><property name="text"><string>Surveillance Objective:</string></property></widget></item>
+       <item row="2" column="1"><widget class="QComboBox" name="combo_objective"/></item>
+       <item row="3" column="0"><widget class="QLabel" name="label_study_area"><property name="text"><string>Study Area Layer:</string></property></widget></item>
+       <item row="3" column="1"><widget class="QgsMapLayerComboBox" name="mMapLayerComboBox_study_area"/></item>
+       <item row="4" column="0" colspan="2"><widget class="Line" name="line_1"><property name="orientation"><enum>Qt::Horizontal</enum></property></widget></item>
+       <item row="5" column="0" colspan="2"><widget class="QLabel" name="label_risk_factors"><property name="text"><string><b>2. Risk Factor Modeling</b></string></property></widget></item>
+       <item row="6" column="0" colspan="2">
+        <widget class="QTableWidget" name="table_risk_factors">
+         <property name="sizeAdjustPolicy"><enum>QAbstractScrollArea::AdjustToContents</enum></property>
+         <attribute name="horizontalHeaderStretchLastSection">true</attribute>
+         <column><property name="text"><string>Layer Name</string></property></column>
+         <column><property name="text"><string>Weight</string></property></column>
+         <column><property name="text"><string>Correlation</string></property></column>
+         <column><property name="text"><string>Type</string></property></column>
+        </widget>
+       </item>
+       <item row="7" column="0"><widget class="QPushButton" name="btn_add_factor"><property name="text"><string>Add Risk Factor</string></property></widget></item>
+       <item row="7" column="1" alignment="Qt::AlignRight"><widget class="QPushButton" name="btn_remove_factor"><property name="text"><string>Remove Selected Factor</string></property></widget></item>
+       <item row="8" column="0"><widget class="QLabel" name="label_resolution"><property name="text"><string>Output Resolution (meters):</string></property></widget></item>
+       <item row="8" column="1"><widget class="QSpinBox" name="spinBox_resolution"><property name="minimum">100</property><property name="maximum">10000</property><property name="singleStep">100</property><property name="value">1000</property></widget></item>
+       <item row="9" column="0" colspan="2"><spacer name="verticalSpacer_1"><property name="orientation"><enum>Qt::Vertical</enum></property></spacer></item>
+       <item row="10" column="0" colspan="2">
+        <widget class="QPushButton" name="btn_generate_risk_map">
+         <property name="minimumSize"><size><width>0</width><height>40</height></size></property>
+         <property name="styleSheet"><string notr="true">background-color: #4CAF50; color: white; font-weight: bold;</string></property>
+         <property name="text"><string>GENERATE FINAL RISK MAP</string></property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <!-- =================================================================== -->
+     <!-- TAB 2: SAMPLING DESIGN                                              -->
+     <!-- =================================================================== -->
+     <widget class="QWidget" name="tab_sampling">
+      <attribute name="title"><string>2. Sampling Design</string></attribute>
+      <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0,0,0,0,0,1,0">
+       <item row="0" column="0" colspan="2"><widget class="QLabel" name="label_sampling_inputs"><property name="text"><string><b>1. Input Data</b></string></property></widget></item>
+       <item row="1" column="0"><widget class="QLabel" name="label_risk_map"><property name="text"><string>Risk Map Layer:</string></property></widget></item>
+       <item row="1" column="1"><widget class="QgsMapLayerComboBox" name="mMapLayerComboBox_risk_map"/></item>
+       <item row="2" column="0"><widget class="QLabel" name="label_snap_layer"><property name="text"><string>Snap Points to Layer (Optional):</string></property></widget></item>
+       <item row="2" column="1"><widget class="QgsMapLayerComboBox" name="mMapLayerComboBox_snap_layer"/></item>
+       <item row="3" column="0" colspan="2"><widget class="Line" name="line_3"><property name="orientation"><enum>Qt::Horizontal</enum></property></widget></item>
+       <item row="4" column="0" colspan="2"><widget class="QLabel" name="label_sampling_method"><property name="text"><string><b>2. Sampling Method & Parameters</b></string></property></widget></item>
+       <item row="5" column="0"><widget class="QLabel" name="label_strategy"><property name="text"><string>Strategy Type:</string></property></widget></item>
+       <item row="5" column="1"><widget class="QComboBox" name="combo_strategy"/></item>
+       <item row="6" column="0" colspan="2">
+        <widget class="QStackedWidget" name="stackedWidget_params">
+         <widget class="QWidget" name="page_random">
+          <layout class="QFormLayout" name="formLayout_random"><item row="0" column="0"><widget class="QLabel"><property name="text"><string>Total Samples:</string></property></widget></item><item row="0" column="1"><widget class="QSpinBox" name="spinBox_random_n"><property name="maximum">99999</property><property name="value">100</property></widget></item></layout>
+         </widget>
+         <widget class="QWidget" name="page_stratified">
+          <layout class="QGridLayout" name="gridLayout_stratified"><item row="0" column="0"><widget class="QLabel"><property name="text"><string>Number of Strata:</string></property></widget></item><item row="0" column="1"><widget class="QSpinBox" name="spinBox_strata_count"><property name="minimum">2</property><property name="maximum">10</property><property name="value">3</property></widget></item><item row="0" column="2"><widget class="QPushButton" name="btn_classify_risk_map"><property name="text"><string>Classify Risk Map</string></property></widget></item><item row="1" column="0" colspan="3"><widget class="QTableWidget" name="table_stratified_n"><column><property name="text"><string>Stratum</string></property></column><column><property name="text"><string># of Samples</string></property></column></widget></item></layout>
+         </widget>
+         <widget class="QWidget" name="page_targeted">
+          <layout class="QFormLayout" name="formLayout_targeted"><item row="0" column="0"><widget class="QLabel"><property name="text"><string>Risk Threshold (0-1):</string></property></widget></item><item row="0" column="1"><widget class="QDoubleSpinBox" name="doubleSpinBox_risk_threshold"><property name="singleStep">0.1</property><property name="value">0.75</property><property name="maximum">1.0</property></widget></item><item row="1" column="0"><widget class="QLabel"><property name="text"><string>Total Samples:</string></property></widget></item><item row="1" column="1"><widget class="QSpinBox" name="spinBox_targeted_n"><property name="maximum">99999</property><property name="value">100</property></widget></item></layout>
+         </widget>
+        </widget>
+       </item>
+       <item row="7" column="0"><widget class="QLabel" name="label_output_name"><property name="text"><string>Output Layer Name:</string></property></widget></item>
+       <item row="7" column="1"><widget class="QLineEdit" name="le_output_name"/></item>
+       <item row="8" column="0" colspan="2"><spacer name="verticalSpacer_2"><property name="orientation"><enum>Qt::Vertical</enum></property></spacer></item>
+       <item row="9" column="0" colspan="2">
+        <widget class="QPushButton" name="btn_generate_samples">
+         <property name="minimumSize"><size><width>0</width><height>40</height></size></property>
+         <property name="styleSheet"><string notr="true">background-color: #008CBA; color: white; font-weight: bold;</string></property>
+         <property name="text"><string>GENERATE SAMPLING POINTS</string></property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <!-- =================================================================== -->
+     <!-- TAB 3: COST EVALUATION                                              -->
+     <!-- =================================================================== -->
+     <widget class="QWidget" name="tab_cost">
+      <attribute name="title"><string>3. Cost Evaluation</string></attribute>
+      <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0,0,0,1,0">
+       <item row="0" column="0" colspan="2"><widget class="QLabel" name="label_cost_params"><property name="text"><string><b>1. Cost Parameter Inputs (in ETB)</b></string></property></widget></item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox_costs">
+         <property name="title"><string>Operational Costs</string></property>
+         <layout class="QFormLayout" name="formLayout_costs">
+          <item row="0" column="0"><widget class="QLabel"><property name="text"><string>Cost per Sample (Lab, Consumables):</string></property></widget></item><item row="0" column="1"><widget class="QSpinBox" name="spinBox_cost_per_sample"><property name="maximum">99999</property><property name="value">500</property></widget></item>
+          <item row="1" column="0"><widget class="QLabel"><property name="text"><string>Field Team Per Diem (per person/day):</string></property></widget></item><item row="1" column="1"><widget class="QSpinBox" name="spinBox_cost_per_diem"><property name="maximum">99999</property><property name="value">1000</property></widget></item>
+          <item row="2" column="0"><widget class="QLabel"><property name="text"><string>People per Field Team:</string></property></widget></item><item row="2" column="1"><widget class="QSpinBox" name="spinBox_team_size"><property name="minimum">1</property><property name="value">2</property></widget></item>
+          <item row="3" column="0"><widget class="QLabel"><property name="text"><string>Samples Collected per Team per Day:</string></property></widget></item><item row="3" column="1"><widget class="QSpinBox" name="spinBox_samples_per_day"><property name="minimum">1</property><property name="maximum">999</property><property name="value">50</property></widget></item>
+          <item row="4" column="0"><widget class="QLabel"><property name="text"><string>Vehicle Cost per Kilometer:</string></property></widget></item><item row="4" column="1"><widget class="QSpinBox" name="spinBox_cost_per_km"><property name="maximum">999</property><property name="value">20</property></widget></item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2"><widget class="Line" name="line_4"><property name="orientation"><enum>Qt::Horizontal</enum></property></widget></item>
+       <item row="3" column="0" colspan="2"><widget class="QLabel" name="label_scenario_analysis"><property name="text"><string><b>2. Scenario Analysis</b></string></property></widget></item>
+       <item row="4" column="0" colspan="2">
+        <widget class="QTableWidget" name="table_scenarios">
+         <property name="editTriggers"><enum>QAbstractItemView::NoEditTriggers</enum></property>
+         <attribute name="horizontalHeaderStretchLastSection">true</attribute>
+         <column><property name="text"><string>Scenario Name</string></property></column>
+         <column><property name="text"><string>Strategy</string></property></column>
+         <column><property name="text"><string># Samples</string></property></column>
+         <column><property name="text"><string>Total Cost (ETB)</string></property></column>
+         <column><property name="text"><string>Cost/Sample</string></property></column>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QPushButton" name="btn_calculate_and_add">
+         <property name="minimumSize"><size><width>0</width><height>40</height></size></property>
+         <property name="styleSheet"><string notr="true">background-color: #f44336; color: white; font-weight: bold;</string></property>
+         <property name="text"><string>CALCULATE COST FOR CURRENT PLAN & ADD TO TABLE</string></property>
+        </widget>
+       </item>
+       <item row="5" column="1" alignment="Qt::AlignRight"><widget class="QPushButton" name="btn_clear_scenarios"><property name="text"><string>Clear Table</string></property></widget></item>
+      </layout>
+     </widget>
+     <!-- =================================================================== -->
+     <!-- TAB 4: REPORT & EXPORT                                              -->
+     <!-- =================================================================== -->
+     <widget class="QWidget" name="tab_report">
+      <attribute name="title"><string>4. Report & Export</string></attribute>
+      <layout class="QGridLayout" name="gridLayout_4" rowstretch="0,0,0,0,0,0,0,1,0">
+       <item row="0" column="0" colspan="2"><widget class="QLabel" name="label_export_field"><property name="text"><string><b>1. Export Sampling Plan for Field Teams</b></string></property></widget></item>
+       <item row="1" column="0"><widget class="QLabel"><property name="text"><string>Sampling Layer:</string></property></widget></item>
+       <item row="1" column="1"><widget class="QgsMapLayerComboBox" name="mMapLayerComboBox_export_layer"/></item>
+       <item row="2" column="0" colspan="2"><widget class="QPushButton" name="btn_export_layer"><property name="text"><string>Export Layer to File (GPX, KML, SHP, CSV)...</string></property></widget></item>
+       <item row="3" column="0" colspan="2"><widget class="Line" name="line_5"><property name="orientation"><enum>Qt::Horizontal</enum></property></widget></item>
+       <item row="4" column="0" colspan="2"><widget class="QLabel" name="label_generate_report"><property name="text"><string><b>2. Generate Formal Surveillance Plan Document</b></string></property></widget></item>
+       <item row="5" column="0"><widget class="QLabel"><property name="text"><string>Report Title:</string></property></widget></item>
+       <item row="5" column="1"><widget class="QLineEdit" name="le_report_title"/></item>
+       <item row="6" column="0"><widget class="QLabel"><property name="text"><string>Author / Department:</string></property></widget></item>
+       <item row="6" column="1"><widget class="QLineEdit" name="le_report_author"/></item>
+       <item row="7" column="0" colspan="2"><spacer name="verticalSpacer_3"><property name="orientation"><enum>Qt::Vertical</enum></property></spacer></item>
+       <item row="8" column="0" colspan="2">
+        <widget class="QPushButton" name="btn_generate_pdf">
+         <property name="minimumSize"><size><width>0</width><height>40</height></size></property>
+         <property name="styleSheet"><string notr="true">background-color: #2196F3; color: white; font-weight: bold;</string></property>
+         <property name="text"><string>GENERATE PDF REPORT</string></property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QgsMapLayerComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qgis.gui</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
