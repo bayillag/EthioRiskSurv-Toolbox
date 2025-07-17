@@ -22,6 +22,47 @@ from .core.risk_analyzer import RiskAnalyzer
 from .core.sampling_designer import SamplingDesigner
 from .core.cost_evaluator import CostEvaluator
 from .core.reporter import Reporter
+# ... (other imports)
+from .utils.gis_utils import load_resource_layer
+
+class EthioRiskSurvToolbox:
+    def __init__(self, iface):
+        # ... (existing init code) ...
+        self.base_layer_menu = None # Add this line
+
+    def initGui(self):
+        """Create the menu entries and toolbar icons."""
+        # ... (existing code to add the main action) ...
+
+        # --- Add a new menu for base layers ---
+        self.base_layer_menu = self.iface.pluginMenu().addMenu("Load EthioRiskSurv Base Layers")
+        
+        load_l1_action = QAction("Load Admin Level 1 (Regions)", self.iface.mainWindow())
+        load_l1_action.triggered.connect(lambda: load_resource_layer('base_layers/ETH_Admin_Level_1.gpkg', 'Ethiopia - Regions'))
+        self.base_layer_menu.addAction(load_l1_action)
+        self.actions.append(load_l1_action)
+
+        load_l2_action = QAction("Load Admin Level 2 (Zones)", self.iface.mainWindow())
+        load_l2_action.triggered.connect(lambda: load_resource_layer('base_layers/ETH_Admin_Level_2.gpkg', 'Ethiopia - Zones'))
+        self.base_layer_menu.addAction(load_l2_action)
+        self.actions.append(load_l2_action)
+
+        load_l3_action = QAction("Load Admin Level 3 (Woredas)", self.iface.mainWindow())
+        load_l3_action.triggered.connect(lambda: load_resource_layer('base_layers/ETH_Admin_Level_3.gpkg', 'Ethiopia - Woredas'))
+        self.base_layer_menu.addAction(load_l3_action)
+        self.actions.append(load_l3_action)
+
+    def unload(self):
+        """Remove menu items and toolbar icon."""
+        # ... (existing code to remove actions and toolbar) ...
+
+        # --- Remove the new menu ---
+        if self.base_layer_menu:
+            self.iface.pluginMenu().removeAction(self.base_layer_menu.menuAction())
+        
+        # ... (rest of unload method) ...
+
+    # ... (run method remains the same) ...
 
 class EthioSurvRiskToolboxDialog(QDialog, Ui_EthioSurvRiskToolboxDialogBase):
     """Main dialog for the EthioSurv-RiskToolbox plugin."""
