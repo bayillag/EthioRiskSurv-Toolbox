@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ report_title }}</title>
+    <style>
+        body { font-family: sans-serif; color: #333; }
+        h1, h2, h3 { color: #005a9c; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; font-weight: bold; }
+        .map-image { text-align: center; margin: 20px 0; }
+        .map-image img { max-width: 100%; border: 1px solid #ccc; }
+        .page-break { page-break-before: always; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>{{ report_title }}</h1>
+        <p><strong>Author:</strong> {{ report_author }}</p>
+        <p><strong>Date Generated:</strong> {{ report_date }}</p>
+    </header>
+
+    <hr>
+
+    <h2>Executive Summary</h2>
+    <table>
+        <tr><th>Parameter</th><th>Value</th></tr>
+        <tr><td>Project Name</td><td>{{ project_name }}</td></tr>
+        <tr><td>Surveillance Objective</td><td>{{ objective }}</td></tr>
+        <tr><td>Study Area</td><td>{{ study_area_name }}</td></tr>
+        <tr><td>Sampling Strategy</td><td>{{ sampling_strategy }}</td></tr>
+        <tr><td>Total Samples</td><td>{{ total_samples }}</td></tr>
+        <tr><td>Estimated Total Cost (ETB)</td><td>{{ "{:,.0f}".format(total_cost) }}</td></tr>
+    </table>
+
+    <div class="page-break"></div>
+
+    <h2>Module 1: Risk Analysis Details</h2>
+    <p>The final risk map was generated using a weighted overlay of the following factors:</p>
+    <table>
+        <tr><th>Risk Factor Layer</th><th>Weight</th><th>Correlation</th></tr>
+        {% for factor in risk_factors %}
+        <tr>
+            <td>{{ factor.name }}</td>
+            <td>{{ factor.weight }}</td>
+            <td>{{ factor.correlation }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+    <div class="map-image">
+        <h3>Final Risk Map and Sampling Points</h3>
+        <!-- The image path must be an absolute local file path for WeasyPrint -->
+        <img src="file://{{ map_image_path }}">
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>Module 2: Sampling Design Details</h2>
+    <p>A <strong>{{ sampling_strategy }}</strong> strategy was employed.</p>
+    <p>A total of <strong>{{ total_samples }}</strong> points were generated.</p>
+    {% if snap_layer_name %}
+    <p>Points were snapped to the nearest feature in: {{ snap_layer_name }}</p>
+    {% endif %}
+    
+    <br>
+    
+    <h2>Module 3: Cost Evaluation Summary</h2>
+    {% if cost_scenarios %}
+    <table>
+        <tr><th>Scenario</th><th>Strategy</th><th># Samples</th><th>Total Cost (ETB)</th><th>Cost/Sample</th></tr>
+        {% for scenario in cost_scenarios %}
+        <tr>
+            <td>{{ scenario[0] }}</td>
+            <td>{{ scenario[1] }}</td>
+            <td>{{ scenario[2] }}</td>
+            <td>{{ scenario[3] }}</td>
+            <td>{{ scenario[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>No cost evaluation scenarios were calculated.</p>
+    {% endif %}
+
+</body>
+</html>
