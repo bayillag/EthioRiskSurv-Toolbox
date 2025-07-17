@@ -408,3 +408,89 @@ class Ui_EthioRiskSurvToolboxDialogBase(object):
         self.btn_generate_pdf.setText(_translate("EthioRiskSurvToolboxDialogBase", "GENERATE PDF REPORT"))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.tab_report), _translate("EthioRiskSurvToolboxDialogBase", "4. Report & Export"))
 from qgis.gui import QgsMapLayerComboBox
+
+# ... (existing imports)
+from ..utils.gis_utils import RESOURCE_LAYERS, get_layer_by_name # <-- IMPORT NEW UTILS
+
+# ... (inside the MainDialog class)
+
+class MainDialog(QDialog, FORM_CLASS):
+    # ... (__init__ method remains the same)
+
+    def setup_ui_logic(self):
+        """Set up initial state and filters for all UI elements."""
+        # --- Tab 1 ---
+        # ... (objective combo box setup) ...
+        self.mMapLayerComboBox_study_area.setFilters(QgsMapLayerProxyModel.PolygonLayer)
+        
+        # --- NEW: Add resource layers to the Study Area dropdown ---
+        self.mMapLayerComboBox_study_area.addItem("--- Base Layers ---", None)
+        for name in RESOURCE_LAYERS.keys():
+            self.mMapLayerComboBox_study_area.addItem(name)
+        
+        # ... (table setup) ...
+
+        # --- Tab 2 ---
+        self.mMapLayerComboBox_risk_map.setFilters(QgsMapLayerProxyModel.RasterLayer)
+        self.mMapLayerComboBox_snap_layer.setFilters(QgsMapLayerProxyModel.PointLayer)
+        # We don't add base layers to the snap layer, as it's meant for user data like Kebeles.
+        
+        # ... (rest of setup_ui_logic) ...
+
+    # --- Update the methods that use the layers ---
+
+    def run_risk_analysis(self):
+        project_name = self.le_project_name.text()
+        
+        # --- MODIFIED: Get the study area layer using our utility ---
+        selected_layer_name = self.mMapLayerComboBox_study_area.currentText()
+        study_area_layer = get_layer_by_name(selected_layer_name)
+        
+        resolution = self.spinBox_resolution.value()
+        
+        if not project_name or not study_area_layer:
+            iface.messageBar().pushMessage("Error", "Project Name and a valid Study Area Layer are required.", level=Qgis.Critical)
+            return
+
+        # ... (The rest of the run_risk_analysis method remains exactly the same) ...
+        # ... it will now work with either a project layer or a newly loaded resource layer.
+
+    def run_sampling_design(self):
+        strategy_name = self.combo_strategy.currentText()
+        risk_map = self.mMapLayerComboBox_risk_map.currentLayer()
+        
+        # --- MODIFIED: Get the study area layer again ---
+        selected_study_area_name = self.mMapLayerComboBox_study_area.currentText()
+        study_area = get_layer_by_name(selected_study_area_name)
+        
+        snap_layer = self.mMapLayerComboBox_snap_layer.currentLayer() # This still comes directly from the project
+        output_name = self.le_output_name.text()
+        
+        if not risk_map or not study_area:
+            iface.messageBar().pushMessage("Error", "A valid Risk Map and Study Area are required.", level=Qgis.Critical)
+            return
+
+        # ... (The rest of the run_sampling_design method remains exactly the same) ...
+
+    def run_cost_evaluation(self):
+        # ... (existing logic) ...
+        # --- MODIFIED: Get the study area layer for HQ point calculation ---
+        selected_study_area_name = self.mMapLayerComboBox_study_area.currentText()
+        study_area_layer = get_layer_by_name(selected_study_area_name)
+        
+        if not study_area_layer:
+            iface.messageBar().pushMessage("Error", "Study Area layer from Tab 1 is required for cost evaluation.", level=Qgis.Critical)
+            return
+        
+        self.hq_point = study_area_layer.extent().center()
+        
+        # ... (The rest of the run_cost_evaluation method remains the same) ...
+        
+    def run_report_generation(self):
+        # ... (existing data gathering logic) ...
+        
+        # --- MODIFIED: Get the study area name for the report ---
+        selected_study_area_name = self.mMapLayerComboBox_study_area.currentText()
+        report_data['study_area_name'] = selected_study_area_name
+        
+        # ... (The rest of the run_report_generation method remains the same) ...
