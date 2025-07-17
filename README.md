@@ -1,1 +1,1 @@
-# EthioSurv-RiskToolbox
+# EthioRiskSurv-Toolbox
