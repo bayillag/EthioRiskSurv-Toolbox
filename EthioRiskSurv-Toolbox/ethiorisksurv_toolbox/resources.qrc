@@ -1,0 +1,11 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/plugins/ethiorisksurv_toolbox/resources">
+        <!-- Image Resources -->
+        <file alias="images/icon.png">images/icon.png</file>
+
+        <!-- Base Layer Resources -->
+        <file alias="base_layers/ETH_Admin_Level_1.gpkg">base_layers/ETH_Admin_Level_1.gpkg</file>
+        <file alias="base_layers/ETH_Admin_Level_2.gpkg">base_layers/ETH_Admin_Level_2.gpkg</file>
+        <file alias="base_layers/ETH_Admin_Level_3.gpkg">base_layers/ETH_Admin_Level_3.gpkg</file>
+    </qresource>
+</RCC>
