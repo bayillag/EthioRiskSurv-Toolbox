@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from ..utils.gis_utils import RESOURCE_LAYERS, get_layer_by_name # <-- IMPORT NEW UTILS
 
 class Ui_EthioSurvRiskToolboxDialogBase(object):
     def setupUi(self, EthioSurvRiskToolboxDialogBase):
