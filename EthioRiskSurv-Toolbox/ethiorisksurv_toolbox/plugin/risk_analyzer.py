@@ -20,15 +20,15 @@ class RiskAnalyzer:
 
     def run(self):
         """Main execution method for risk analysis."""
-        QgsMessageLog.logMessage("Starting risk analysis process.", "EthioSurv-RiskToolbox", Qgis.Info)
+        QgsMessageLog.logMessage("Starting risk analysis process.", "EthioRiskSurv-Toolbox", Qgis.Info)
 
         # --- 1. Validate Inputs ---
         if not self.study_area_layer or not self.study_area_layer.isValid():
-            QgsMessageLog.logMessage("Invalid study area layer provided.", "EthioSurv-RiskToolbox", Qgis.Critical)
+            QgsMessageLog.logMessage("Invalid study area layer provided.", "EthioRiskSurv-Toolbox", Qgis.Critical)
             return False
 
         if not self.risk_factors:
-            QgsMessageLog.logMessage("No risk factors provided.", "EthioSurv-RiskToolbox", Qgis.Warning)
+            QgsMessageLog.logMessage("No risk factors provided.", "EthioRiskSurv-Toolbox", Qgis.Warning)
             return False
             
         # --- 2. Prepare environment for processing ---
@@ -42,7 +42,7 @@ class RiskAnalyzer:
             weight = factor['weight']
             correlation = factor['correlation'] # 'Higher' or 'Lower'
             
-            QgsMessageLog.logMessage(f"Processing factor: {layer.name()}", "EthioSurv-RiskToolbox", Qgis.Info)
+            QgsMessageLog.logMessage(f"Processing factor: {layer.name()}", "EthioRiskSurv-Toolbox", Qgis.Info)
             
             # Temporary path for intermediate files
             temp_path = os.path.join(self.project.homePath(), f"temp_{layer.name().replace(' ', '_')}.tif")
@@ -61,7 +61,7 @@ class RiskAnalyzer:
                 processed_layer = layer # It's already a raster
 
             if not processed_layer.isValid():
-                QgsMessageLog.logMessage(f"Failed to process layer {layer.name()}", "EthioSurv-RiskToolbox", Qgis.Critical)
+                QgsMessageLog.logMessage(f"Failed to process layer {layer.name()}", "EthioRiskSurv-Toolbox", Qgis.Critical)
                 continue
 
             # B. Normalize the processed raster to 0-1
@@ -69,7 +69,7 @@ class RiskAnalyzer:
             normalized_layer = normalize_raster(processed_layer, norm_path)
             
             if not normalized_layer or not normalized_layer.isValid():
-                QgsMessageLog.logMessage(f"Failed to normalize layer {processed_layer.name()}", "EthioSurv-RiskToolbox", Qgis.Critical)
+                QgsMessageLog.logMessage(f"Failed to normalize layer {processed_layer.name()}", "EthioRiskSurv-Toolbox", Qgis.Critical)
                 continue
             
             # C. Invert if correlation is 'Lower values = Higher Risk'
@@ -89,10 +89,10 @@ class RiskAnalyzer:
         
         # --- 4. Run Weighted Overlay ---
         if not processed_factors:
-            QgsMessageLog.logMessage("No factors could be processed.", "EthioSurv-RiskToolbox", Qgis.Critical)
+            QgsMessageLog.logMessage("No factors could be processed.", "EthioRiskSurv-Toolbox", Qgis.Critical)
             return False
 
-        QgsMessageLog.logMessage("Performing weighted overlay...", "EthioSurv-RiskToolbox", Qgis.Info)
+        QgsMessageLog.logMessage("Performing weighted overlay...", "EthioRiskSurv-Toolbox", Qgis.Info)
         
         # Build the raster calculator formula and entries
         formula = ""
@@ -140,8 +140,8 @@ class RiskAnalyzer:
         final_risk_map = QgsRasterLayer(clipped_risk_map_path, f"{self.project_name} - Risk Map")
         if final_risk_map.isValid():
             self.project.addMapLayer(final_risk_map)
-            QgsMessageLog.logMessage("Risk analysis completed successfully!", "EthioSurv-RiskToolbox", Qgis.Success)
+            QgsMessageLog.logMessage("Risk analysis completed successfully!", "EthioRiskSurv-Toolbox", Qgis.Success)
             return True
         else:
-            QgsMessageLog.logMessage("Failed to create the final clipped risk map.", "EthioSurv-RiskToolbox", Qgis.Critical)
+            QgsMessageLog.logMessage("Failed to create the final clipped risk map.", "EthioRiskSurv-Toolbox", Qgis.Critical)
             return False
