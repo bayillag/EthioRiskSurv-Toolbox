@@ -29,10 +29,10 @@ class Reporter:
             self._create_cost_evaluation_section()
             
             doc.build(self.story)
-            QgsMessageLog.logMessage("PDF report built successfully.", "EthioSurv-RiskToolbox", Qgis.Success)
+            QgsMessageLog.logMessage("PDF report built successfully.", "EthioRiskSurv-Toolbox", Qgis.Success)
             return True
         except Exception as e:
-            QgsMessageLog.logMessage(f"Failed to build PDF report: {e}", "EthioSurv-RiskToolbox", Qgis.Critical)
+            QgsMessageLog.logMessage(f"Failed to build PDF report: {e}", "EthioRiskSurv-Toolbox", Qgis.Critical)
             return False
 
     def _create_title_page(self):
