@@ -21,10 +21,10 @@ class CostEvaluator:
         Calculates the total estimated cost for the given surveillance plan.
         Returns a dictionary with detailed cost breakdowns.
         """
-        QgsMessageLog.logMessage("Starting cost evaluation.", "EthioSurv-RiskToolbox", Qgis.Info)
+        QgsMessageLog.logMessage("Starting cost evaluation.", "EthioRiskSurv-Toolbox", Qgis.Info)
 
         if not self.sampling_layer or self.sampling_layer.featureCount() == 0:
-            QgsMessageLog.logMessage("No sampling points to evaluate.", "EthioSurv-RiskToolbox", Qgis.Warning)
+            QgsMessageLog.logMessage("No sampling points to evaluate.", "EthioRiskSurv-Toolbox", Qgis.Warning)
             return None
 
         # --- 1. Get counts and basic parameters ---
@@ -61,9 +61,9 @@ class CostEvaluator:
             
             total_distance_km = total_distance_m / 1000
             logistics_costs = total_distance_km * cost_per_km
-            QgsMessageLog.logMessage(f"Total travel distance calculated: {total_distance_km:.2f} km", "EthioSurv-RiskToolbox", Qgis.Info)
+            QgsMessageLog.logMessage(f"Total travel distance calculated: {total_distance_km:.2f} km", "EthioRiskSurv-Toolbox", Qgis.Info)
         else:
-            QgsMessageLog.logMessage("HQ point not set. Logistics costs will be zero.", "EthioSurv-RiskToolbox", Qgis.Warning)
+            QgsMessageLog.logMessage("HQ point not set. Logistics costs will be zero.", "EthioRiskSurv-Toolbox", Qgis.Warning)
 
         # --- 5. Aggregate and return results ---
         total_cost = fixed_costs + personnel_costs + logistics_costs
@@ -80,5 +80,5 @@ class CostEvaluator:
             }
         }
         
-        QgsMessageLog.logMessage(f"Cost evaluation complete. Total estimated cost: {total_cost:.2f} ETB", "EthioSurv-RiskToolbox", Qgis.Success)
+        QgsMessageLog.logMessage(f"Cost evaluation complete. Total estimated cost: {total_cost:.2f} ETB", "EthioRiskSurv-Toolbox", Qgis.Success)
         return results
