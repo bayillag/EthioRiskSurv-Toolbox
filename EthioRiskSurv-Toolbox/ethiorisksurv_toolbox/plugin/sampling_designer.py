@@ -24,7 +24,7 @@ class SamplingDesigner:
 
     def generate_random_points(self, count):
         """Generates simple random points within the study area."""
-        QgsMessageLog.logMessage(f"Generating {count} random points.", "EthioSurv-RiskToolbox", Qgis.Info)
+        QgsMessageLog.logMessage(f"Generating {count} random points.", "EthioRiskSurv-Toolbox", Qgis.Info)
         
         params = {
             'INPUT': self.study_area,
@@ -36,7 +36,7 @@ class SamplingDesigner:
 
     def generate_stratified_points(self, classified_raster, strata_counts):
         """Generates points within each stratum of a classified raster."""
-        QgsMessageLog.logMessage(f"Generating stratified points for {len(strata_counts)} strata.", "EthioSurv-RiskToolbox", Qgis.Info)
+        QgsMessageLog.logMessage(f"Generating stratified points for {len(strata_counts)} strata.", "EthioRiskSurv-Toolbox", Qgis.Info)
 
         final_points = []
         for stratum_value, count in strata_counts.items():
@@ -130,7 +130,7 @@ class SamplingDesigner:
         final_layer = points_layer
         # Snapping logic
         if self.snap_layer and self.snap_layer.isValid():
-            QgsMessageLog.logMessage(f"Snapping points to layer: {self.snap_layer.name()}", "EthioSurv-RiskToolbox", Qgis.Info)
+            QgsMessageLog.logMessage(f"Snapping points to layer: {self.snap_layer.name()}", "EthioRiskSurv-Toolbox", Qgis.Info)
             params = {
                 'INPUT': points_layer,
                 'REFERENCE_LAYER': self.snap_layer,
