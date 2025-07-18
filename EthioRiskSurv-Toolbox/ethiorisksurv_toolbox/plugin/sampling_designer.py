@@ -79,7 +79,7 @@ class SamplingDesigner:
 
     def generate_targeted_points(self, threshold, count):
         """Generates random points within areas exceeding a risk threshold."""
-        QgsMessageLog.logMessage(f"Generating {count} targeted points with threshold > {threshold}.", "EthioSurv-RiskToolbox", Qgis.Info)
+        QgsMessageLog.logMessage(f"Generating {count} targeted points with threshold > {threshold}.", "EthioRiskSurv-Toolbox", Qgis.Info)
         
         # Create a mask of high-risk areas
         expr = f'"{self.risk_map.name()}@1" >= {threshold}'
